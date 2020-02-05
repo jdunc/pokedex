@@ -9,5 +9,12 @@
 
   p {
     text-align: center;
+    margin-top: 0px;
   }
+}
+
+.text-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
