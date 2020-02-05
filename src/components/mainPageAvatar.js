@@ -14,6 +14,7 @@ class MainPageAvatar extends Component {
       <Link
         to={`/detail/${this.props.id + 1}`}
         className={`avatar-container ${this.props.hidden}`}
+        key={"pokeImage-" + this.props.id}
       >
         <div className="avatar-image">
           <img src={this.props.image} />

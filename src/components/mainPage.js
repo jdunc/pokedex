@@ -24,7 +24,8 @@ class MainPage extends Component {
     let pokemonToRender =
       this.state.selected === "all" ? this.props.pokemon : this.props.myPokemon;
     return (
-      <div>
+      <div className={"main-page"}>
+        {this.state.loading ? <div>Loading the images...</div> : ""}
         <div
           onClick={this.updatedPokemonSelection}
           className={`toggle-my-pokemon selected-${this.state.selected}`}
@@ -52,6 +53,7 @@ class MainPage extends Component {
             }
             return (
               <MainPageAvatar
+                key={"avatar-" + index}
                 hidden={hidden}
                 id={index}
                 image={pokemon.info ? pokemon.info.sprites.front_default : ""}
