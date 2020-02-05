@@ -11,7 +11,10 @@ class MainPageAvatar extends Component {
 
   render() {
     return (
-      <Link to={`/${this.props.id}`} className="avatar-container">
+      <Link
+        to={`/detail/${this.props.id + 1}`}
+        className={`avatar-container ${this.props.hidden}`}
+      >
         <div className="avatar-image">
           <img src={this.props.image} />
         </div>

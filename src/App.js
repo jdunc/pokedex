@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import MainPage from "./components/mainPage";
 import "./styles/app.scss";
+import Description from "./components/descriptionPage";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -92,14 +93,17 @@ class App extends Component {
     return (
       <Router>
         <Switch>
+          <Route path="/detail/:id">
+            <Description
+              pokemon={this.state.pokemon}
+              myPokemon={this.state.myPokemon}
+            />
+          </Route>
           <Route path="/">
             <MainPage
               pokemon={this.state.pokemon}
               myPokemon={this.state.myPokemon}
             />
-          </Route>
-          <Route path="/about">
-            <div>About</div>
           </Route>
         </Switch>
       </Router>
