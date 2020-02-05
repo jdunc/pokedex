@@ -87,6 +87,7 @@ class App extends Component {
   async addStatsToPokemon(startingIndex, pokemon) {
     let failedIndex = null;
     let needsUpdated = [];
+    let endIndex = startingIndex + 80 > 151 ? 151 : startingIndex + 80;
     for (let i = startingIndex; i < pokemon.length; i++) {
       if (!pokemon[i].info) {
         needsUpdated.push(i);
@@ -109,12 +110,20 @@ class App extends Component {
         locations = locations.locations;
 
         let json = await response.json();
-        let { height, weight, types, moves, sprites } = json;
+        let { height, weight, types, moves, sprites, abilities } = json;
         // filter out the version_group_details of the move
         moves = moves.map(move => {
           return move.move;
         });
-        pokemon[i].info = { height, weight, types, moves, sprites, locations };
+        pokemon[i].info = {
+          height,
+          weight,
+          types,
+          moves,
+          sprites,
+          abilities,
+          locations
+        };
       }
     }
     this.setState({ pokemon });

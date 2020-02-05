@@ -48,10 +48,22 @@ class Description extends Component {
             <div>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             </div>
+            <span style={{marginTop: 20, display: 'block'}}>{pokemon.info && pokemon.info.moves && pokemon.info.moves.length ? <strong>moves:</strong> : ""}</span>
+            <div className={"allMoves"}>
+              {pokemon.info && pokemon.info.moves && pokemon.info.moves.map(move=>{
+                return (<div key={move} className={"moves"}>{move.name}</div>)
+              })}
+            </div>
           </div>
         </div>
         <div className="map">
-          <PokeMap locations={pokemon.info.locations}/>
+          <PokeMap locations={pokemon.info.locations} />
+          <div style={{marginTop: 20}}>
+            {pokemon.info && pokemon.info.abilities && pokemon.info.abilities.length ? <strong>Abilities:</strong> : ""}
+            {pokemon.info && pokemon.info.abilities && pokemon.info.abilities.map(ability=>{
+              return (<div key={ability} className={"abilities"}>{ability.ability.name}</div>)
+            })}
+          </div>
         </div>
       </div>
     );
