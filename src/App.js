@@ -88,18 +88,18 @@ class App extends Component {
     let failedIndex = null;
     let needsUpdated = [];
     let endIndex = startingIndex + 80 > 151 ? 151 : startingIndex + 80;
-    for (let i = startingIndex; i < pokemon.length; i++) {
+    for (let i = startingIndex; i < endIndex; i++) {
       if (!pokemon[i].info) {
         needsUpdated.push(i);
+      }
+    }
+    let results = await Promise.all(
+      needsUpdated.map(async pokemonIndex => {
         let response = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${i + 1}`
+          `https://pokeapi.co/api/v2/pokemon/${pokemonIndex + 1}`
         );
-        if (!response.ok) {
-          failedIndex = i;
-          break;
-        }
         let locationsRequest = await fetch(
-          `https://api.craft-demo.net/pokemon/${i + 1}`,
+          `https://api.craft-demo.net/pokemon/${pokemonIndex + 1}`,
           {
             headers: new Headers({
               "x-api-key": "HHko9Fuxf293b3w56zAJ89s3IcO9D5enaEPIg86l"
@@ -108,14 +108,14 @@ class App extends Component {
         );
         let locations = await locationsRequest.json();
         locations = locations.locations;
-
         let json = await response.json();
         let { height, weight, types, moves, sprites, abilities } = json;
         // filter out the version_group_details of the move
         moves = moves.map(move => {
           return move.move;
         });
-        pokemon[i].info = {
+        return {
+          index: pokemonIndex,
           height,
           weight,
           types,
@@ -124,18 +124,74 @@ class App extends Component {
           abilities,
           locations
         };
-      }
-    }
+      })
+    );
+    results.forEach(result => {
+      pokemon[result.index].info = result;
+    });
     this.setState({ pokemon });
     this.saveLocalStorage();
-    if (failedIndex) {
+    if (endIndex < 151) {
       setTimeout(() => {
-        this.addStatsToPokemon(failedIndex);
+        this.addStatsToPokemon(endIndex, pokemon);
       }, 1005);
     } else {
       this.setState({ loading: false });
     }
   }
+
+  // async addStatsToPokemon(startingIndex, pokemon) {
+  //   let failedIndex = null;
+  //   let needsUpdated = [];
+  //   let endIndex = startingIndex + 80 > 151 ? 151 : startingIndex + 80;
+  //   for (let i = startingIndex; i < pokemon.length; i++) {
+  //     if (!pokemon[i].info) {
+  //       needsUpdated.push(i);
+  //       let response = await fetch(
+  //         `https://pokeapi.co/api/v2/pokemon/${i + 1}`
+  //       );
+  //       if (!response.ok) {
+  //         failedIndex = i;
+  //         break;
+  //       }
+  //       let locationsRequest = await fetch(
+  //         `https://api.craft-demo.net/pokemon/${i + 1}`,
+  //         {
+  //           headers: new Headers({
+  //             "x-api-key": "HHko9Fuxf293b3w56zAJ89s3IcO9D5enaEPIg86l"
+  //           })
+  //         }
+  //       );
+  //       let locations = await locationsRequest.json();
+  //       locations = locations.locations;
+
+  //       let json = await response.json();
+  //       let { height, weight, types, moves, sprites, abilities } = json;
+  //       // filter out the version_group_details of the move
+  //       moves = moves.map(move => {
+  //         return move.move;
+  //       });
+  //       pokemon[i].info = {
+  //         height,
+  //         weight,
+  //         types,
+  //         moves,
+  //         sprites,
+  //         abilities,
+  //         locations
+  //       };
+  //     }
+  //   }
+  //   this.setState({ pokemon });
+  //   this.saveLocalStorage();
+  //   if (failedIndex) {
+  //     setTimeout(() => {
+  //       this.addStatsToPokemon(failedIndex);
+  //     }, 1005);
+  //   } else {
+  //     this.setState({ loading: false });
+  //   }
+  // }
 
   toggleBagPokemon(index, bagged) {
     let { pokemon, myPokemon } = this.state;
