@@ -14,10 +14,15 @@ class App extends Component {
     this.loadLocalStorage = this.loadLocalStorage.bind(this);
     this.saveLocalStorage = this.saveLocalStorage.bind(this);
     this.addStatsToPokemon = this.addStatsToPokemon.bind(this);
+    this.toggleBagPokemon = this.toggleBagPokemon.bind(this);
   }
 
   componentDidMount() {
     this.loadLocalStorage();
+  }
+
+  componentWillUnmount() {
+    this.saveLocalStorage();
   }
 
   saveLocalStorage() {
@@ -29,6 +34,7 @@ class App extends Component {
       );
     }
     if (myPokemon && myPokemon.length) {
+      console.log("saving my pokemon");
       window.localStorage.setItem(
         "myPokemon",
         JSON.stringify(this.state.myPokemon)
@@ -80,8 +86,10 @@ class App extends Component {
 
   async addStatsToPokemon(startingIndex, pokemon) {
     let failedIndex = null;
+    let needsUpdated = [];
     for (let i = startingIndex; i < pokemon.length; i++) {
       if (!pokemon[i].info) {
+        needsUpdated.push(i);
         let response = await fetch(
           `https://pokeapi.co/api/v2/pokemon/${i + 1}`
         );
@@ -120,6 +128,21 @@ class App extends Component {
     }
   }
 
+  toggleBagPokemon(index, bagged) {
+    let { pokemon, myPokemon } = this.state;
+    pokemon[index].inBag = bagged;
+    if (bagged) {
+      myPokemon.push(pokemon[index]);
+    } else {
+      let sliceIndex = myPokemon.findIndex(thisPokemon => {
+        return thisPokemon.name === pokemon[index].name;
+      });
+      myPokemon.splice(sliceIndex, 1);
+    }
+    this.setState({ pokemon, myPokemon });
+    this.saveLocalStorage();
+  }
+
   render() {
     const { loading } = this.state;
     return (
@@ -133,6 +156,7 @@ class App extends Component {
                 pokemon={this.state.pokemon}
                 myPokemon={this.state.myPokemon}
                 loading={loading}
+                toggle={this.toggleBagPokemon}
               />
             )}
           />

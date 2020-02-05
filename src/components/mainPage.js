@@ -56,8 +56,12 @@ class MainPage extends Component {
                 key={"avatar-" + index}
                 hidden={hidden}
                 id={index}
-                image={pokemon.info ? pokemon.info.sprites.front_default : ""}
-                name={pokemon.name}
+                image={
+                  pokemon && pokemon.info
+                    ? pokemon.info.sprites.front_default
+                    : ""
+                }
+                name={pokemon && pokemon.name}
               />
             );
           })}
