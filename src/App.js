@@ -34,7 +34,6 @@ class App extends Component {
       );
     }
     if (myPokemon && myPokemon.length) {
-      console.log("saving my pokemon");
       window.localStorage.setItem(
         "myPokemon",
         JSON.stringify(this.state.myPokemon)

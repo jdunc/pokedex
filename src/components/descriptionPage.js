@@ -51,7 +51,7 @@ class Description extends Component {
             <span style={{marginTop: 20, display: 'block'}}>{pokemon.info && pokemon.info.moves && pokemon.info.moves.length ? <strong>moves:</strong> : ""}</span>
             <div className={"allMoves"}>
               {pokemon.info && pokemon.info.moves && pokemon.info.moves.map(move=>{
-                return (<div key={move} className={"moves"}>{move.name}</div>)
+                return (<div key={move.name} className={"moves"}>{move.name}</div>)
               })}
             </div>
           </div>
@@ -61,7 +61,7 @@ class Description extends Component {
           <div style={{marginTop: 20}}>
             {pokemon.info && pokemon.info.abilities && pokemon.info.abilities.length ? <strong>Abilities:</strong> : ""}
             {pokemon.info && pokemon.info.abilities && pokemon.info.abilities.map(ability=>{
-              return (<div key={ability} className={"abilities"}>{ability.ability.name}</div>)
+              return (<div key={ability.ability.name} className={"abilities"}>{ability.ability.name}</div>)
             })}
           </div>
         </div>
