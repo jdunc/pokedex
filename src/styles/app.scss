@@ -1,0 +1,13 @@
+.main-page-pokemon {
+  max-width: 100vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.avatar-container {
+  padding: 10px;
+
+  p {
+    text-align: center;
+  }
+}
